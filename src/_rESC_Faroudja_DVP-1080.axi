@@ -1,0 +1,28 @@
+PROGRAM_NAME='_ESCALADOR_Faroudja_DVP-1080'
+
+DEFINE_CONSTANT
+
+TIEMPO_PROTECCION_PROYECTOR = 3000
+//TIEMPO_PROTECCION_PROYECTOR = 300
+
+CMD_ESC_F_ON						= 1
+CMD_ESC_F_OFF						= 2
+CMD_ESC_F_ASPECT_4_3				= 3
+CMD_ESC_F_ASPECT_LETTERBOX		= 4
+CMD_ESC_F_ASPECT_ANAMORPHIC	= 5
+
+DEFINE_VARIABLE
+
+char sCmdEscF[ 50 ][ 10 ]
+
+DEFINE_START
+
+sCmdEscF[ CMD_ESC_F_ON ] 						= "'dvp,on', $0d"
+sCmdEscF[ CMD_ESC_F_OFF ] 						= "'dvp,off', $0d"
+sCmdEscF[ CMD_ESC_F_ASPECT_4_3 ]				= "'dvp,a0', $0d"
+sCmdEscF[ CMD_ESC_F_ASPECT_LETTERBOX ]		= "'dvp,a1', $0d"
+sCmdEscF[ CMD_ESC_F_ASPECT_ANAMORPHIC ]	= "'dvp,a2', $0d"
+
+
+
+

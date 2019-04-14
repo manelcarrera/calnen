@@ -1,0 +1,123 @@
+PROGRAM_NAME='_iSAT_Pace_810'
+
+//El fichero 'SAT_Pace810.irl' no ha funcionado
+
+DEFINE_CONSTANT
+
+BTN_SAT_1			=	101
+BTN_SAT_2			=	102
+BTN_SAT_3			=	103
+BTN_SAT_4			=	104
+BTN_SAT_5			=	105
+BTN_SAT_6			=	106
+BTN_SAT_7			=	107
+BTN_SAT_8			=	108
+BTN_SAT_9			=	109
+BTN_SAT_PROG_DOWN	=	110
+BTN_SAT_0			=	111
+BTN_SAT_PROG_UP	=	112
+BTN_SAT_VOL_UP		=	113
+BTN_SAT_MUTE		=	114
+BTN_SAT_VOL_DOWN	=	115
+BTN_SAT_LISTA		=	116
+BTN_SAT_MENU		=	117
+BTN_SAT_EXIT		=	118
+BTN_SAT_INFO		=	119
+BTN_SAT_RADIO_TV	=	120
+BTN_SAT_ROJO		=	121
+BTN_SAT_VERDE		=	122
+BTN_SAT_AMARILLO	=	123
+BTN_SAT_AZUL		=	124
+
+IR_SAT_POWER		= 1
+IR_SAT_LIST      	= 2
+IR_SAT_TIMERS    	= 3
+IR_SAT_VFORMAT    = 4
+IR_SAT_EPG      	= 5
+IR_SAT_TV_RADIO   = 6
+IR_SAT_EXIT     	= 7
+IR_SAT_MENU       = 8
+IR_SAT_OPT      	= 9
+IR_SAT_UP     		= 10
+IR_SAT_DOWN    	= 11
+IR_SAT_LEFT    	= 12
+IR_SAT_RIGHT      = 13
+IR_SAT_PROG_DOWN  = 14
+IR_SAT_PROG_UP    = 15
+IR_SAT_VOL_DOWN   = 16  
+IR_SAT_VOL_UP     = 17
+IR_SAT_INFO       = 18
+IR_SAT_ROJO       = 19
+IR_SAT_VERDE      = 20
+IR_SAT_AMARILLO   = 21
+IR_SAT_AZUL       = 22
+IR_SAT_1         	= 23
+IR_SAT_2         	= 24
+IR_SAT_3         	= 25
+IR_SAT_4         	= 26
+IR_SAT_5         	= 27
+IR_SAT_6         	= 28
+IR_SAT_7         	= 29
+IR_SAT_8         	= 30
+IR_SAT_9         	= 31
+IR_SAT_0         	= 32
+IR_SAT_TEXT       = 33
+IR_SAT_MUTE       = 34
+
+
+DEFINE_VARIABLE
+
+integer aBtnSat[]  = 		
+{
+	 BTN_SAT_1,
+	 BTN_SAT_2,
+	 BTN_SAT_3,
+	 BTN_SAT_4,
+	 BTN_SAT_5,
+	 BTN_SAT_6,
+	 BTN_SAT_7,
+	 BTN_SAT_8,
+	 BTN_SAT_9,
+	 BTN_SAT_PROG_DOWN,
+	 BTN_SAT_0,
+	 BTN_SAT_PROG_UP,
+	 BTN_SAT_LISTA,
+	 BTN_SAT_MENU,
+	 BTN_SAT_EXIT,
+	 BTN_SAT_INFO,
+	 BTN_SAT_RADIO_TV,
+	 BTN_SAT_ROJO,
+	 BTN_SAT_VERDE,
+	 BTN_SAT_AMARILLO,
+	 BTN_SAT_AZUL
+}
+
+integer aIrSat[]  =	 	
+{
+	 IR_SAT_1,			//BTN_SAT_1,
+	 IR_SAT_2,			//BTN_SAT_2,
+	 IR_SAT_3,			//BTN_SAT_3,
+	 IR_SAT_4,			//BTN_SAT_4,
+	 IR_SAT_5,			//BTN_SAT_5,
+	 IR_SAT_6,			//BTN_SAT_6,
+	 IR_SAT_7,			//BTN_SAT_7,
+	 IR_SAT_8,			//BTN_SAT_8,
+	 IR_SAT_9,			//BTN_SAT_9,
+	 IR_SAT_PROG_DOWN,//BTN_SAT_PROG_DOWN,
+	 IR_SAT_0,			//BTN_SAT_0,
+	 IR_SAT_PROG_UP,	//BTN_SAT_PROG_UP,
+	 IR_SAT_LIST,		//BTN_SAT_LISTA,
+	 IR_SAT_MENU,		//BTN_SAT_MENU,
+	 IR_SAT_EXIT,		//BTN_SAT_EXIT,
+	 IR_SAT_INFO, 		//BTN_SAT_INFO,
+	 IR_SAT_TV_RADIO,	//BTN_SAT_RADIO_TV,
+	 IR_SAT_ROJO,		//BTN_SAT_ROJO,
+	 IR_SAT_VERDE,		//BTN_SAT_VERDE,
+	 IR_SAT_AMARILLO,	//BTN_SAT_AMARILLO,
+	 IR_SAT_AZUL		//BTN_SAT_AZUL,
+}
+
+DEFINE_EVENT
+
+button_event[ dvTp, aBtnSat ]{ push:{ Pulse[ dvSat, aIrSat[ Get_Last( aBtnSat ) ] ] } }
+

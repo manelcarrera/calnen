@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Workspace [
+
+<!-- Common Elements -->
+<!ELEMENT Identifier (#PCDATA)>
+<!ELEMENT Comments (#PCDATA)>
+<!ELEMENT CreationDate (#PCDATA)>
+
+<!-- Workspace Elements-->
+<!ELEMENT Workspace ( Identifier,
+               CreateVersion,
+               PJS_File?,
+               PJS_ConvertDate?,
+               PJS_CreateDate?,
+               Comments?,
+               Project*)>
+
+<!ATTLIST Workspace 
+      CurrentVersion CDATA   #REQUIRED> 
+
+<!ELEMENT CreateVersion     (#PCDATA)>
+
+
+<!-- Conversion data only: only included for files converted from the old .pjs database -->
+<!ELEMENT PJS_File (#PCDATA)>
+<!ELEMENT PJS_ConvertDate (#PCDATA)>
+<!ELEMENT PJS_CreateDate (#PCDATA)>
+
+<!ELEMENT Project ( Identifier,
+               Designer?,
+               DealerID?,
+               SalesOrder?,
+               PurchaseOrder?,
+               Comments?,
+               System*)>
+
+<!ELEMENT Designer (#PCDATA)>
+<!ELEMENT DealerID (#PCDATA)>
+<!ELEMENT SalesOrder (#PCDATA)>
+<!ELEMENT PurchaseOrder (#PCDATA)>
+
+
+<!ELEMENT System  (  Identifier,
+                 SysID,
+                 TransSerial?,
+                 TransModem?,
+                 TransTCPIP?,
+                 VirtualNetLinxMasterFlag?,
+                 VNMRestoreIPSettings?,
+                 VNMSystemID?,
+                 VNMIPAddress?,
+                 VNMMaskAddress?,
+                 IsAuthenticationEnabled?,
+                 UserName?,
+                 Password?,
+                 Comments?,
+                 File*)>
+
+<!ATTLIST System
+      IsActive   (true | false)   "false"
+      Platform   (Axcess | Netlinx)   "Axcess"
+      Transport   (Serial | Modem | TCPIP) "Serial">
+
+<!ELEMENT SysID (#PCDATA)>
+<!ELEMENT TransSerial (#PCDATA)>
+<!ELEMENT TransModem (#PCDATA)>
+<!ELEMENT TransTCPIP (#PCDATA)>
+<!ELEMENT VirtualNetLinxMasterFlag (#PCDATA)>
+<!ELEMENT VNMRestoreIPSettings (#PCDATA)>
+<!ELEMENT VNMSystemID (#PCDATA)>
+<!ELEMENT VNMIPAddress (#PCDATA)>
+<!ELEMENT VNMMaskAddress (#PCDATA)>
+<!ELEMENT IsAuthenticationEnabled (#PCDATA)>
+<!ELEMENT UserName (#PCDATA)>
+<!ELEMENT Password (#PCDATA)>
+
+
+<!ELEMENT File ( Identifier,
+               FilePathName,
+               Comments?,
+               DeviceMap*,
+               IRDB*)>
+
+<!ATTLIST File 
+       Type (Source | MasterSrc | Include | Module | AXB | IR | TPD | TP4 | KPD | TKO | AMX_IR_DB | IRN_DB | Other | DUET | TOK | TKN | KPB ) "Other"
+       CompileType (Axcess | Netlinx | None) "None"> 
+
+<!ELEMENT FilePathName	(#PCDATA)>
+                            
+<!ELEMENT DeviceMap (DevName)>
+       <!ATTLIST DeviceMap DevAddr CDATA #REQUIRED>
+
+       <!ELEMENT DevName (#PCDATA)>
+
+<!ELEMENT IRDB    (Property,
+                 DOSName,
+                 UserDBPathName,
+                 Notes)>
+       <!ATTLIST IRDB DBKey CDATA #REQUIRED>
+
+       <!ELEMENT Property (#PCDATA)>
+       <!ELEMENT DOSName (#PCDATA)>
+       <!ELEMENT UserDBPathName (#PCDATA)>
+       <!ELEMENT Notes (#PCDATA)>
+]>
+
+<Workspace CurrentVersion="3.2"><Identifier>ws01</Identifier>
+<CreateVersion>3.1</CreateVersion>
+<PJS_File></PJS_File>
+<PJS_ConvertDate></PJS_ConvertDate>
+<PJS_CreateDate></PJS_CreateDate>
+<Comments></Comments>
+<Project><Identifier>MC0801</Identifier>
+<Designer></Designer>
+<DealerID></DealerID>
+<SalesOrder></SalesOrder>
+<PurchaseOrder></PurchaseOrder>
+<Comments></Comments>
+<System IsActive="true" Platform="Netlinx" Transport="TCPIP"><Identifier>S01</Identifier>
+<SysID>0</SysID>
+<TransSerial>COM4,115200,8,None,1,None</TransSerial>
+<TransModem>COM1,38400,8,None,1,None</TransModem>
+<TransTCPIP>192.168.1.10:1319:1:Coll</TransTCPIP>
+<VirtualNetLinxMasterFlag>0</VirtualNetLinxMasterFlag>
+<VNMRestoreIPSettings>0.0.0.0:1319:1</VNMRestoreIPSettings>
+<VNMSystemID>1</VNMSystemID>
+<VNMIPAddress>10.0.0.1</VNMIPAddress>
+<VNMMaskAddress>255.255.255.0</VNMMaskAddress>
+<IsAuthenticationEnabled>0</IsAuthenticationEnabled>
+<UserName></UserName>
+<Password></Password>
+<Comments></Comments>
+<File CompileType="None" Type="Include"><Identifier>_Colas</Identifier>
+<FilePathName>_Colas.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_iMotor_LAVA_mmotion</Identifier>
+<FilePathName>_iMotor_LAVA_mmotion.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_iSAT_iPlus</Identifier>
+<FilePathName>_iSAT_iPlus.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_iSAT_LyngBox</Identifier>
+<FilePathName>_iSAT_LyngBox.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_iTV_Panasonic_TX-P42GT50E</Identifier>
+<FilePathName>_iTV_Panasonic_TX-P42GT50E.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_iVIDEO_Sony</Identifier>
+<FilePathName>_iVIDEO_Sony.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_MANDOS</Identifier>
+<FilePathName>_MANDOS.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rBLURAY_OPPO_BDP95EU</Identifier>
+<FilePathName>_rBLURAY_OPPO_BDP95EU.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rDVD_Meridian_800</Identifier>
+<FilePathName>_rDVD_Meridian_800.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rESC_DVDO_iScanVP50Pro</Identifier>
+<FilePathName>_rESC_DVDO_iScanVP50Pro.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rESC_Faroudja_DVP-1080</Identifier>
+<FilePathName>_rESC_Faroudja_DVP-1080.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rPROC_Meridian_861</Identifier>
+<FilePathName>_rPROC_Meridian_861.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rPROC_Meridian_HD621HDMI</Identifier>
+<FilePathName>_rPROC_Meridian_HD621HDMI.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_rPROY_Faroudja</Identifier>
+<FilePathName>_rPROY_Faroudja.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="Include"><Identifier>_TP_MVP5200</Identifier>
+<FilePathName>_TP_MVP5200.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="IR"><Identifier>BLURAY_PioneerBDP-LX70</Identifier>
+<FilePathName>ir\BLURAY_PioneerBDP-LX70.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvBluRay"><DevName>dvBluRay</DevName>
+</DeviceMap>
+</File>
+<File CompileType="None" Type="IR"><Identifier>iPlus</Identifier>
+<FilePathName>ir\iPlus.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvPlus"><DevName>dvPlus</DevName>
+</DeviceMap>
+</File>
+<File CompileType="None" Type="IR"><Identifier>SAT_LyngBox</Identifier>
+<FilePathName>ir\SAT_LyngBox.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvSat"><DevName>dvSat</DevName>
+</DeviceMap>
+</File>
+<File CompileType="None" Type="IR"><Identifier>SUBWOOFER_Velodyne.irl</Identifier>
+<FilePathName>ir\SUBWOOFER_Velodyne.irl.irl</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="IR"><Identifier>TV_Sony_KV-32FS60E</Identifier>
+<FilePathName>ir\TV_Sony_KV-32FS60E.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvTV"><DevName>dvTV</DevName>
+</DeviceMap>
+</File>
+<File CompileType="None" Type="IR"><Identifier>Video_Sony_RMT-V168</Identifier>
+<FilePathName>ir\Video_Sony_RMT-V168.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvVideo"><DevName>dvVideo</DevName>
+</DeviceMap>
+</File>
+<File CompileType="Netlinx" Type="MasterSrc"><Identifier>Main, Rev01</Identifier>
+<FilePathName>Main, Rev01.axs</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="None" Type="TP4"><Identifier>mc0801, Rev01</Identifier>
+<FilePathName>tp\mc0801, Rev01.TP4</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvTp"><DevName>dvTp</DevName>
+</DeviceMap>
+</File>
+</System>
+</Project>
+</Workspace>
