@@ -1,9 +1,15 @@
 PROGRAM_NAME='LluisColl-v02'
 
+//escena tv apagar meridian
+//escena tv amb equipament mirar volum tele
+//canal plus memories
+//camara: meridian 72351 hdmi4 meridian hd621 input 3
+ 
 DEFINE_DEVICE
 
 //Panel
-dvTp						= 10001:1:0
+dvTp1						= 10001:1:0
+dvTp2						= 10002:1:0
 
 //IR
 dvTV					= 5001:9:0	//TV
@@ -22,7 +28,7 @@ dvProcA					= 5001:5:0 //Procesador audio Meridian HD621HDMI
 dvBluRay				= 5001:6:0	//OPPO BDP-95EU 
 
 //Relays
-dvRelays					= 5001:8:0 
+dvRelays					= 5001:8:0
 dvIOs						= 5001:17:0 
 
 DEFINE_CONSTANT
@@ -141,9 +147,9 @@ PROY_DISPONIBLE			= 3
 
 //Tiempos
 
-TIEMPO_ESPERA_PROYECTOR		= 1200 //2min. (1)proteccion de la bombeta, (2) apagada de llums
+TIEMPO_ESPERA_PROYECTOR		= 900 //2min. (1)proteccion de la bombeta, (2) apagada de llums
 TIEMPO_PANTALLA_UP_DOWN		= 450
-TIEMPO_ESPERA_LUCES_CINE 	= 1000
+TIEMPO_ESPERA_LUCES_CINE 	= 100
 //TIEMPO_ARRANQUE_TV 			= 150 //a partir de aqui enviamos código para eliminar el OSD
 
 TIEMPO_ENCENDIDO_EQ			= 10
@@ -157,8 +163,8 @@ TIEMPO_LYNGBOX					= 900 //1m30s
 //TIEMPO_PLUS						= 650 //1m5s.
 TIEMPO_PLUS						= 750 //1m15s.
 
-TIEMPO_RETARDO_TV_OFF		= 400 //25s
-TIEMPO_RETARDO_PROY_OFF		= 220 //22s, de 15s a 22s
+TIEMPO_RETARDO_TV_OFF		= 250 //25s
+TIEMPO_RETARDO_PROY_OFF		= 1200 //22s, de 15s a 22s
 
 //IU
 
@@ -212,6 +218,8 @@ DEFINE_VARIABLE
 
 //integer nivel
 integer m_mando
+
+DEV dvTp[2] = {dvTp1, dvTp2}
 
 char sRelays[][50] =
 {
@@ -294,7 +302,8 @@ include '_iMotor_LAVA_mmotion.axi'
 include '_rDVD_Meridian_800.axi'
 include '_rESC_DVDO_iScanVP50Pro.axi'
 include '_rESC_Faroudja_DVP-1080.axi'
-include '_rPROY_Faroudja.axi'
+//include '_rPROY_Faroudja.axi'
+include '_rPROY_JVC_Dila'
 include '_rPROC_Meridian_861.axi'
 include '_rPROC_Meridian_HD621HDMI.axi'
 include '_rBLURAY_OPPO_BDP95EU.axi'
@@ -569,14 +578,14 @@ define_function setDevice( integer val )
 		  {
 				switch( val ) 
 				{
-					 case DEV_IPLUS:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI1, 10 )  }
-					 case DEV_DVD_V:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI2, 10 )  }
-					 case DEV_DVD_A:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI2, 10 )  }
-					 case DEV_BLURAY:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI4, 10 )  }
-					 case DEV_SAT:		{ ppush( cEsc, CMD_ESC_D_IN_HDMI3, 10 )  }
+					 case DEV_IPLUS:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI1, 10 ) doProyector(CMD_PROY_HDMI2) }
+					 case DEV_DVD_V:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI2, 10 ) doProyector(CMD_PROY_HDMI2) }
+					 case DEV_DVD_A:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI2, 10 ) doProyector(CMD_PROY_HDMI2) }
+					 case DEV_BLURAY:	{ ppush( cEsc, CMD_ESC_D_IN_HDMI4, 10 ) doProyector(CMD_PROY_HDMI1) }
+					 case DEV_SAT:		{ ppush( cEsc, CMD_ESC_D_IN_HDMI3, 10 ) doProyector(CMD_PROY_HDMI2) }
 					 
-					 case DEV_PC:		{ ppush( cEsc, CMD_ESC_D_IN_COMP3_RGBHV, 10 )  } //rgb
-					 case DEV_CAM:		{ ppush( cEsc, CMD_ESC_D_IN_HDMI4, 10 )  } 
+					 case DEV_PC:		{ ppush( cEsc, CMD_ESC_D_IN_COMP3_RGBHV, 10 ) doProyector(CMD_PROY_HDMI2) } //rgb
+					 case DEV_CAM:		{ ppush( cEsc, CMD_ESC_D_IN_HDMI4, 10 ) doProyector(CMD_PROY_HDMI2) } 
 				}
 		  }
 		  case ESC_TV_CON_EQUIPOS:
@@ -614,7 +623,7 @@ define_function setDevice( integer val )
 				{
 					 case DEV_TV:		{ ppush( cTV, IR_TV_TV, 			10 ) }
 					 case DEV_IPLUS:	{ ppush( cTV, IR_TV_INPUT_HDMI_1, 	10 ) }
-					 case DEV_DVD_V:	{ ppush( cTV, IR_TV_INPUT_HDMI_3, 	10 ) }
+					 case DEV_DVD_V:	{ ppush( cTV, IR_TV_INPUT_HDMI_3, 	10 ) ppush_p( cRelays, REL_MERIDIAN, 			REL_ON, 10 ) ppush( cDVD, CMD_DVD_SRC_DVD, 	100 )}
 					 //case DEV_DVD_A:	{ ppush( cTV, IR_TV_INPUT_HDMI_3, 	10 ) }
 
 					 //FIXME:
@@ -693,7 +702,11 @@ define_function integer onRelays( integer doOn ) //solo los encendidos
 	 if( doOn )
 	 {
 		  if( isPeticionEscena( ESC_CINE ) )
+			{
+				//ppush_p( cRelays, REL_PROYECTOR, 			REL_ON, 10 )
+				ON[dvIOs,8]
 				ppush_p( cRelays, REL_FLEXO_PANTALLA_DOWN, REL_ON, 10 )
+			}
 	 }
 		  
 	 switch( getEscena() )
@@ -708,8 +721,8 @@ define_function integer onRelays( integer doOn ) //solo los encendidos
 						  {
 								ppush_p( cRelays, REL_TV, 					REL_ON, 10 )
 								ppush_p( cRelays, REL_IPLUS, 				REL_ON, 10 )
-								ppush_p( cRelays, REL_SERV_CONT, 			REL_ON, 10 )   //vídeo y servidor de contenidos
-								ppush_p( cRelays, REL_MERIDIAN, 			REL_ON, 10 )
+								ppush_p( cRelays, REL_SERV_CONT, 			REL_OFF, 10 )   //vídeo y servidor de contenidos
+								ppush_p( cRelays, REL_MERIDIAN, 			REL_OFF, 10 )
 								ppush_p( cRelays, REL_EQUIPOS, 				REL_ON, 10 )	//SAT HD: Lyngbox (entre otros)
 						  }
 						  return 50
@@ -725,7 +738,7 @@ define_function integer onRelays( integer doOn ) //solo los encendidos
 								ppush_p( cRelays, REL_SERV_CONT, 			REL_ON, 10 ) //aqui están vídeo y servidor de contenidos
 								ppush_p( cRelays, REL_MERIDIAN, 			REL_ON, 10 )
 								ppush_p( cRelays, REL_EQUIPOS, 				REL_ON, 10 )
-								ppush_p( cRelays, REL_PROYECTOR, 			REL_ON, 10 )
+								
 								ppush_p( cRelays, REL_PANTALLAS_SUBWOOFER, 	REL_ON, 10 )
 						  }
 
@@ -745,7 +758,7 @@ define_function integer onRelays( integer doOn ) //solo los encendidos
 						  if( doOn )
 						  {
 								ppush_p( cRelays, REL_MERIDIAN, 					REL_ON, 10 )
-								ppush_p( cRelays, REL_PROYECTOR, 				REL_ON, 10 )
+								//ppush_p( cRelays, REL_PROYECTOR, 				REL_ON, 10 )
 								ppush_p( cRelays, REL_PANTALLAS_SUBWOOFER, 	REL_ON, 10 )
 						  }
 
@@ -760,6 +773,9 @@ define_function integer onRelays( integer doOn ) //solo los encendidos
 				switch( getPeticionEscena() ) //a donde va
 				{
 					 case ESC_TV:
+					 {
+							ppush_p( cRelays, REL_MERIDIAN, 					REL_OFF, 10 )	
+					 }
 					 case ESC_TV_CON_EQUIPOS:
 					 case ESC_CINE:
 					 case ESC_MUSICA:
@@ -780,10 +796,21 @@ define_function integer offRelays( integer doOff ) //aqui solo miramos los apaga
 		  if( isEscena( ESC_TV ) || isEscena( ESC_TV_CON_EQUIPOS ) )
 		  {
 				wait TIEMPO_RETARDO_PROY_OFF
+				{
 					 ppush_p( cRelays, REL_FLEXO_PANTALLA_DOWN, REL_OFF, 0 )
+					 WAIT TIEMPO_PANTALLA_UP_DOWN
+							//ppush_p( cRelays, REL_PROYECTOR, 			REL_OFF, 10 )
+							OFF[dvIOs,8]
+				}
 		  }
 		  else
-				ppush_p( cRelays, REL_FLEXO_PANTALLA_DOWN, REL_OFF, 0 )
+				wait TIEMPO_RETARDO_PROY_OFF
+				{
+					ppush_p( cRelays, REL_FLEXO_PANTALLA_DOWN, REL_OFF, 0 )
+					 WAIT TIEMPO_PANTALLA_UP_DOWN
+							//ppush_p( cRelays, REL_PROYECTOR, 			REL_OFF, 10 )
+							OFF[dvIOs,8]
+				}
 	 }
 
 	 switch( getEscenaAnterior() ) //donde estaba
@@ -819,7 +846,12 @@ define_function integer offRelays( integer doOff ) //aqui solo miramos los apaga
 						  
 						  return 40
 					 }
-					 //case ESC_TV:
+					 case ESC_TV:
+						if ( doOff)
+						{
+							ppush_p( cRelays, REL_MERIDIAN, 	REL_OFF, 10 )
+							ppush_p( cRelays, REL_SERV_CONT,	REL_OFF, 10 )
+						}
 					 case ESC_TV_CON_EQUIPOS:
 					 case ESC_CINE:
 					 case ESC_MUSICA:
@@ -857,7 +889,6 @@ define_function integer offRelays( integer doOff ) //aqui solo miramos los apaga
 								//wait TIEMPO_RETARDO_PROY_OFF
 								ppush_p( cRelays, REL_PANTALLAS_SUBWOOFER, 	REL_OFF, 0 )
 						  }
-
 						  return 20
 					 }
 					 case ESC_TV_CON_EQUIPOS:
@@ -1173,7 +1204,8 @@ define_function arrancaPlus()
 					 {
 						  setEstadoPlus( IPLUS_ENCENDIDO )
 						  ppush( cPlus, IR_IPLUS_1, 30 )  //encendido				
-						  ppush( cPlus, IR_IPLUS_1, 0 )	//canal 1				
+							WAIT 30 setCanal(2,1,3)
+							
 						  send_string 0, "'iPlus encendido...'"
 						  showMsgTempo('iPlus arrencat...', 20 )
 						  setDevice( DEV_IPLUS )
@@ -1183,7 +1215,9 @@ define_function arrancaPlus()
 				{
 					 setEstadoPlus( IPLUS_ENCENDIDO )
 					 ppush( cPlus, IR_IPLUS_1, 30 )  //encendido				
-					 ppush( cPlus, IR_IPLUS_1, 0 )	//canal 1				
+					WAIT 30 setCanal(2,1,3)
+
+					 
 					 send_string 0, "'iPlus encendido...'"
 					 showMsgTempo('iPlus arrencat...', 20 )
 					 setDevice( DEV_IPLUS )
@@ -1236,13 +1270,14 @@ define_function doSemantica2( integer val )
 				ppush( cEsc, CMD_ESC_D_ON, 						50 )
 				ppush( cEsc, CMD_ESC_D_AUDIO_SELECT_SPDIF, 	10 )
 
-				ppush( cProy, CMD_PROY_ON, 50 )				
+				doProyector(CMD_PROY_ON)				
 
 				setEstadoProyector( PROY_CALENTANDO )
 				wait TIEMPO_ESPERA_PROYECTOR 'luces_off'
 				{
 					 setEstadoProyector( PROY_DISPONIBLE )
 					 lucesOff()
+					 //ppush( cProy, CMD_PROY_HDMI1, 10)
 				}
 
 				ppush( cProc, CMD_PROC_SRC_TAPE1, 			10 )
@@ -1297,13 +1332,13 @@ define_function doSemantica2( integer val )
 				//Escalador-Procesador-Proyector
 				ppush( cEsc, CMD_ESC_D_OFF, 						10 )
 
-				ppush( cProy, CMD_PROY_OFF, 						50 )				
+				doProyector(CMD_PROY_OFF)
 
 				setEstadoProyector( PROY_ENFRIANDO )
 				wait TIEMPO_ESPERA_PROYECTOR
 				{
 					 setEstadoProyector( PROY_DISPONIBLE )
-					 Off[ dvRelays, REL_PROYECTOR ]
+					 //Off[ dvRelays, REL_PROYECTOR ]
 				}
 				lucesOn()
 
@@ -1321,15 +1356,17 @@ define_function doSemantica2( integer val )
 				
 				//paraLyngBox()
 
+				doProyector(CMD_PROY_OFF)
+
 				wait TIEMPO_RETARDO_PROY_OFF
 				{
-					 ppush( cProy, CMD_PROY_OFF, 						50 )				
+
 
 					 setEstadoProyector( PROY_ENFRIANDO )
 					 wait TIEMPO_ESPERA_PROYECTOR
 					 {
 						  setEstadoProyector( PROY_DISPONIBLE )
-						  Off[ dvRelays, REL_PROYECTOR ]
+						  //Off[ dvRelays, REL_PROYECTOR ]
 					 }
 				}
 				lucesOn()
@@ -1355,13 +1392,13 @@ define_function doSemantica2( integer val )
 				//Escalador-Proyector
 				ppush( cEsc, CMD_ESC_D_AUDIO_SELECT_SPDIF, 	10 )
 
-				ppush( cProy, CMD_PROY_OFF, 						50 )				
+doProyector(CMD_PROY_OFF)
 
 				setEstadoProyector( PROY_ENFRIANDO )
 				wait TIEMPO_ESPERA_PROYECTOR
 				{
 					 setEstadoProyector( PROY_DISPONIBLE )
-					 Off[ dvRelays, REL_PROYECTOR ]
+					 //Off[ dvRelays, REL_PROYECTOR ]
 				}
 				lucesOn()
 
@@ -1373,8 +1410,9 @@ define_function doSemantica2( integer val )
 				//Escalador-Proyector -> On
 				ppush( cEsc, CMD_ESC_D_ON, 					50 )
 				ppush( cEsc, CMD_ESC_D_AUDIO_SELECT_SPDIF,	10 )
+				ppush( cDVD, CMD_DVD_SRC_DVD, 	20 )
 
-				ppush( cProy, CMD_PROY_ON, 						50 )				
+doProyector(CMD_PROY_ON)				
 
 				wait TIEMPO_ESPERA_PROYECTOR 'luces_off'
 				{
@@ -1385,7 +1423,7 @@ define_function doSemantica2( integer val )
 				//ppush( cProc, CMD_PROC_SRC_DVD, 			20 )
 
 				//TV -> Off
-				wait TIEMPO_RETARDO_TV_OFF
+				wait TIEMPO_ESPERA_PROYECTOR
 				{
 					motorIn()
 					wait 50
@@ -1436,10 +1474,11 @@ define_function doSemantica2( integer val )
 				ppush( 			cDVD, 					CMD_DVD_SRC_DVD, 		20 )
 
 				//Escalador-Proyector -> On
-				ppush( cProy, CMD_PROY_ON, 						50 )				
+				doProyector(CMD_PROY_ON)				
 				//send_string 	dvEscF, sCmdEscF[ 	CMD_ESC_F_ON ] 
 				wait TIEMPO_ESPERA_PROYECTOR 'luces_off'
 				{
+					 //ppush (cProy, CMD_PROY_HDMI1, 10)
 					 setEstadoProyector( PROY_DISPONIBLE )
 					 lucesOff()
 				}
@@ -1500,19 +1539,18 @@ define_function doSemantica2( integer val )
 				ppush( cEsc, CMD_ESC_D_OFF, 						10 )
 				
 				//paraLyngBox()
+				doProyector(CMD_PROY_OFF)
 
-				wait TIEMPO_RETARDO_PROY_OFF
-				{
 					 //Escalador-Proyector: Off
-					 ppush( cProy, CMD_PROY_OFF, 						50 )				
+					 				
 
 					 setEstadoProyector( PROY_ENFRIANDO )
 					 wait TIEMPO_ESPERA_PROYECTOR
 					 {
 						  setEstadoProyector( PROY_DISPONIBLE )
-						  Off[ dvRelays, REL_PROYECTOR ]
+						  //Off[ dvRelays, REL_PROYECTOR ]
 					 }
-				}
+
 				lucesOn()
 
 				//Procesador -> No pararlo, necesitamos el DVD
@@ -1555,7 +1593,7 @@ define_function doSemantica2( integer val )
 				ppush( cEsc, CMD_ESC_D_AUDIO_SELECT_SPDIF, 	10 )
 
 				//TV -> Off
-				wait TIEMPO_RETARDO_TV_OFF
+				wait TIEMPO_ESPERA_PROYECTOR
 				{
 					motorIn()
 					wait 50
@@ -1563,7 +1601,7 @@ define_function doSemantica2( integer val )
 				}
 
 				//Escalador-Proyector -> On
-				ppush( cProy, CMD_PROY_ON, 						50 )				
+				doProyector(CMD_PROY_ON)				
 
 				wait TIEMPO_ESPERA_PROYECTOR 'luces_off'
 				{
@@ -2036,7 +2074,7 @@ button_event[ dvTp, aBtnExternalButtons ]
 		  
 		  send_string 0, "'aBtnExternalButtons[', itoa( btn ),']'"
 
-		  if( isPantallaTV() )
+		  /*if( isPantallaTV() )
 		  {
 				switch( btn )
 				{
@@ -2046,7 +2084,9 @@ button_event[ dvTp, aBtnExternalButtons ]
 					 case BTN_EXT_RIGHT:	{ ppush( cTV, IR_TV_RIGHT, 0 ) }
 					 case BTN_EXT_SELECT:	{ ppush( cTV, IR_TV_OK, 0 ) }
 				}
-		  }
+		  }*/
+			if (0)
+			{}
 		  else
 		  {
 				switch( btn )
@@ -2262,13 +2302,13 @@ button_event[ dvTp, BTN_GEN_FORMATO_PROY ]
 						  case PROY_FORMAT_50:	
 						  { 
 								//send_string dvProy, sCmdProy[ CMD_PROY_FORMAT_60 ]
-								ppush( cProy, CMD_PROY_FORMAT_60, 10 )				
+								//ppush( cProy, CMD_PROY_FORMAT_60, 10 )				
 								setFormatoP( PROY_FORMAT_60 )
 						  }
 						  case PROY_FORMAT_60:	
 						  { 
 								//send_string dvProy, sCmdProy[ CMD_PROY_FORMAT_50 ]
-								ppush( cProy, CMD_PROY_FORMAT_50, 10 )				
+								//ppush( cProy, CMD_PROY_FORMAT_50, 10 )				
 								setFormatoP( PROY_FORMAT_50 )
 						  }
 					 }//switch
@@ -2335,7 +2375,6 @@ button_event[ dvTp, BTN_BR_DVD ]
 		showPopup('06-BluRay') 
 	} 
 }
-
 
 DEFINE_PROGRAM
 

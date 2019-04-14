@@ -186,6 +186,10 @@
 <FilePathName>_rPROY_Faroudja.axi</FilePathName>
 <Comments></Comments>
 </File>
+<File CompileType="None" Type="Include"><Identifier>_rPROY_JVC_Dila</Identifier>
+<FilePathName>_rPROY_JVC_Dila.axi</FilePathName>
+<Comments></Comments>
+</File>
 <File CompileType="None" Type="Include"><Identifier>_TP_MVP5200</Identifier>
 <FilePathName>_TP_MVP5200.axi</FilePathName>
 <Comments></Comments>

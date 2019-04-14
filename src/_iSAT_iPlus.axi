@@ -263,6 +263,7 @@ IR_IPLUS_OK 				= 45
 
 DEFINE_VARIABLE
 
+integer nFlag = 0
 integer aBtnGrupoCanales[]  = 		
 {
 	BTN_GRUPO_CANALES_CPLUS,
@@ -318,6 +319,9 @@ integer aBtnIPlus[]  =
 
 	 BTN_IPLUS_SALIR
 }
+
+non_volatile integer iMemoriasCanales[2000]
+integer canalAMemorizar
 
 integer aBtnTVPreset[]  = 		
 {
@@ -540,6 +544,22 @@ integer aBtnPresetsRadio[]  =
 
 tCola cPlus
 ssCmdPlus[ 100 ][ 50 ]
+
+define_function memorizaCanal(INTEGER iPreset, INTEGER iCanal)
+{
+ iMemoriasCanales[iPreset] = iCanal
+}
+
+define_function marcaCanal(INTEGER iPreset)
+{
+ local_var c,d,u,canal
+ canal = iMemoriasCanales[iPreset]
+ c = canal / 100
+ d = canal % 100
+ u = d % 10
+ d = d / 10
+ setCanal(c,d,u)
+}
 
 define_function MainLinePlus()
 {
@@ -921,20 +941,23 @@ button_event[ dvTp, aBtnIPlus ]
 }
 
 button_event[ dvTp, aBtnTVPreset ]
-{ 
-	 push:
+{
+	 push:{}
+	 release:
 	 {
+		  if(!nFlag)
+		  {
 		  local_var index, btn
 		  index = Get_Last( aBtnTVPreset )
 		  btn = aBtnTVPreset[ index ]
 
 		  marcaCanalTV( btn )
-		  
-		  switch( btn )
+		  marcaCanal (btn)
+		  /*switch( btn )
 		  {
 				//1. C+
-				case BTN_TV_PRESET_CP_1:{ setCanal( 0, 0, 1 ) } //C+ 1
-				case BTN_TV_PRESET_CP_2:{ setCanal( 0, 0, 2 ) } //C+ 2
+				case BTN_TV_PRESET_CP_1:{ marcaCanal( btn ) } //C+ 1
+				case BTN_TV_PRESET_CP_2:{ marcaCanal( BTN_TV_PRESET_CP_2 ) } //C+ 2
 				case BTN_TV_PRESET_CP_3:{ setCanal( 0, 0, 3 ) }	//C+ 1 ...30
 				case BTN_TV_PRESET_CP_4:{ setCanal( 0, 0, 4 ) }	//C+ Xtra
 				case BTN_TV_PRESET_CP_5:{ setCanal( 0, 0, 5 ) }	//C+ Multicine
@@ -1071,8 +1094,19 @@ button_event[ dvTp, aBtnTVPreset ]
 				case BTN_TV_PRESET_HD_28:{ setCanal( 2, 2, 0 ) } //TV3 HD
 				case BTN_TV_PRESET_HD_29:{ setCanal( 2, 2, 2 ) } //T5 HD
 				//case BTN_TV_PRESET_HD_30:{ setCanal( 2, 2, 1 ) } //A3 HD
+		  }*/
 		  }
+		  OFF[nFlag]
 	 } 
+	hold[10]:
+	{
+		  local_var index, btn
+		  nFlag = 1
+		  index = Get_Last( aBtnTVPreset )
+		  btn = aBtnTVPreset[ index ]
+		  send_command dvTp,"'AKEYP-'"
+		  canalAMemorizar = btn
+	}
 }
 
 button_event[ dvTp, aBtnRadio ]
@@ -1129,4 +1163,20 @@ button_event[ dvTp, BTN_IPLUS_RESET_HARD ]
 
 		  }*/
 	 }
+}
+Data_Event[dvTp]
+{
+STRING:
+{
+LOCAL_VAR CHAR cBuffer[10]	
+cBuffer = DATA.TEXT
+SELECT
+{
+ACTIVE (FIND_STRING(cBuffer,'KEYP',1)):
+{
+REMOVE_STRING(cBuffer,'KEYP-',1)
+iMemoriasCanales[canalAMemorizar] = ATOI("cBuffer")
+}
+}	
+}
 }
