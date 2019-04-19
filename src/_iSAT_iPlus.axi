@@ -810,16 +810,16 @@ button_event[ dvTp, aBtnPresetsRadio ]
 					 ppush( cPlus, IR_IPLUS_4, 		2 )
 					 ppush( cPlus, IR_IPLUS_7, 		2 )
 
-					 /*ppush( cPlus, IR_IPLUS_8, 		2 )
-					 ppush( cPlus, IR_IPLUS_7, 		80 )
+					 //ppush( cPlus, IR_IPLUS_8, 		2 )
+					 //ppush( cPlus, IR_IPLUS_7, 		80 )
 
-					 ppush( cPlus, IR_IPLUS_OK,	 	100 )
+					 //ppush( cPlus, IR_IPLUS_OK,	 	100 )
 
-					 ppush( cPlus, IR_IPLUS_DOWN, 	10 )
-					 ppush( cPlus, IR_IPLUS_OK, 		30 )
+					 //ppush( cPlus, IR_IPLUS_DOWN, 	10 )
+					 //ppush( cPlus, IR_IPLUS_OK, 		30 )
 					 
-					 for( i = 0; i < 6; i++ ){ ppush( cPlus, IR_IPLUS_DOWN, 	5 ) }
-					 ppush( cPlus, IR_IPLUS_OK, 		10 )*/
+					 //for( i = 0; i < 6; i++ ){ ppush( cPlus, IR_IPLUS_DOWN, 	5 ) }
+					 //ppush( cPlus, IR_IPLUS_OK, 		10 )
 
 				}
 				//-------------------------
@@ -1116,8 +1116,8 @@ button_event[ dvTp, aBtnRadio ]
 		  local_var index, code
 		  index = Get_Last( aBtnRadio )
 		  code = aIrRadio[ index ]
-		  send_string 0, "'iPlus-Radio code[',itoa( code ),']'"
-		  Pulse[ dvRadio, code ] 
+		  send_string 0, "' [NO] iPlus-Radio code[',itoa( code ),']'"
+		  //Pulse[ dvRadio, code ] 
 	 } 
 }
 

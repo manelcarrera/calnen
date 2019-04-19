@@ -51,7 +51,6 @@ data_event[ dvTp ]
 				setEscena( 					ESC_NINGUNA )	//esto toca el mando
 				setPeticionEscena( 		ESC_NINGUNA )
 				
-				setEstadoLyngBox( /*LYNGBOX_PARADO*/ LYNGBOX_ENCENDIDO )
 				setEstadoPlus( 	IPLUS_PARADO )
 
 				//setDevice( 					DEV_NINGUNO )	//esto también toca el mando
@@ -64,7 +63,7 @@ data_event[ dvTp ]
 				setVol( 40 )
 				setLevel( 0 )
 
-				setFormato( 	ESC_FORMAT_4_3 )
+				//setFormato( 	ESC_FORMAT_4_3 )
 				setFormatoP( 	PROY_FORMAT_50 )
 				
 				//setPantallaTV( false ) //2013-06-09, a ver si así va mejor

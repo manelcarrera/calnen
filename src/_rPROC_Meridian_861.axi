@@ -370,18 +370,18 @@ button_event[ dvTp, aBtnDSP ]
 	 { 
 		  //hidePopup('12-DSP')
 
-		  send_string 0, "'Proc:',sCmdDvd[ aCmdDSP[ Get_Last( aBtnDSP ) ] ] "
+		  send_string 0, "'Proc:',sCmdProc[ aCmdDSP[ Get_Last( aBtnDSP ) ] ] "
 		  send_string dvProc, sCmdProc[ aCmdDSP[ Get_Last( aBtnDSP ) ] ] 
 	 } 
 }
 
-button_event[ dvTp, BTN_DVD_DSP ]
+/*button_event[ dvTp, BTN_DVD_DSP ]
 { 
 	 push:
 	 { 
 		  showPopup('12-DSP')
 	 } 
-}
+}*/
 
 
 

@@ -292,7 +292,6 @@ button_event[ dvTp, aBtnDvd ]
 	 push:
 	 { 
 		  send_string 0, "'Dvd:',sCmdDvd[ aCmdDvd[ Get_Last( aBtnDvd ) ] ] "
-		  //send_string dvProc, sCmdDvd[ aCmdDvd[ Get_Last( aBtnDvd ) ] ] 
 		  send_string dvDvd, sCmdDvd[ aCmdDvd[ Get_Last( aBtnDvd ) ] ] 
 	 } 
 }

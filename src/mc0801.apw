@@ -20,19 +20,18 @@
 
 <!ELEMENT CreateVersion     (#PCDATA)>
 
-
 <!-- Conversion data only: only included for files converted from the old .pjs database -->
 <!ELEMENT PJS_File (#PCDATA)>
 <!ELEMENT PJS_ConvertDate (#PCDATA)>
 <!ELEMENT PJS_CreateDate (#PCDATA)>
 
-<!ELEMENT Project ( Identifier,
-               Designer?,
-               DealerID?,
-               SalesOrder?,
-               PurchaseOrder?,
-               Comments?,
-               System*)>
+<!ELEMENT Project (	Identifier,
+                 Designer?,
+                 DealerID?,
+                 SalesOrder?,
+                 PurchaseOrder?,
+                 Comments?,
+                 System*)>
 
 <!ELEMENT Designer (#PCDATA)>
 <!ELEMENT DealerID (#PCDATA)>
@@ -75,11 +74,11 @@
 <!ELEMENT Password (#PCDATA)>
 
 
-<!ELEMENT File ( Identifier,
-               FilePathName,
-               Comments?,
-               DeviceMap*,
-               IRDB*)>
+<!ELEMENT File (   Identifier,
+                 FilePathName,
+                 Comments?,
+                 DeviceMap*,
+                 IRDB*)>
 
 <!ATTLIST File 
        Type (Source | MasterSrc | Include | Module | AXB | IR | TPD | TP4 | KPD | TKO | AMX_IR_DB | IRN_DB | Other | DUET | TOK | TKN | KPB ) "Other"
@@ -104,7 +103,7 @@
        <!ELEMENT Notes (#PCDATA)>
 ]>
 
-<Workspace CurrentVersion="3.2"><Identifier>ws01</Identifier>
+<Workspace CurrentVersion="3.1"><Identifier>ws01</Identifier>
 <CreateVersion>3.1</CreateVersion>
 <PJS_File></PJS_File>
 <PJS_ConvertDate></PJS_ConvertDate>
@@ -130,6 +129,12 @@
 <UserName></UserName>
 <Password></Password>
 <Comments></Comments>
+<File CompileType="None" Type="IR"><Identifier>iMovistar_2019</Identifier>
+<FilePathName>..\ir\iMovistar_2019.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="dvPlus"><DevName>dvPlus</DevName>
+</DeviceMap>
+</File>
 <File CompileType="None" Type="Include"><Identifier>_Colas</Identifier>
 <FilePathName>_Colas.axi</FilePathName>
 <Comments></Comments>
@@ -142,16 +147,8 @@
 <FilePathName>_iSAT_iPlus.axi</FilePathName>
 <Comments></Comments>
 </File>
-<File CompileType="None" Type="Include"><Identifier>_iSAT_LyngBox</Identifier>
-<FilePathName>_iSAT_LyngBox.axi</FilePathName>
-<Comments></Comments>
-</File>
 <File CompileType="None" Type="Include"><Identifier>_iTV_Panasonic_TX-P42GT50E</Identifier>
 <FilePathName>_iTV_Panasonic_TX-P42GT50E.axi</FilePathName>
-<Comments></Comments>
-</File>
-<File CompileType="None" Type="Include"><Identifier>_iVIDEO_Sony</Identifier>
-<FilePathName>_iVIDEO_Sony.axi</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="None" Type="Include"><Identifier>_MANDOS</Identifier>
@@ -166,24 +163,12 @@
 <FilePathName>_rDVD_Meridian_800.axi</FilePathName>
 <Comments></Comments>
 </File>
-<File CompileType="None" Type="Include"><Identifier>_rESC_DVDO_iScanVP50Pro</Identifier>
-<FilePathName>_rESC_DVDO_iScanVP50Pro.axi</FilePathName>
-<Comments></Comments>
-</File>
-<File CompileType="None" Type="Include"><Identifier>_rESC_Faroudja_DVP-1080</Identifier>
-<FilePathName>_rESC_Faroudja_DVP-1080.axi</FilePathName>
+<File CompileType="None" Type="Include"><Identifier>_rESC_Kramer_VP734</Identifier>
+<FilePathName>_rESC_Kramer_VP734.axi</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="None" Type="Include"><Identifier>_rPROC_Meridian_861</Identifier>
 <FilePathName>_rPROC_Meridian_861.axi</FilePathName>
-<Comments></Comments>
-</File>
-<File CompileType="None" Type="Include"><Identifier>_rPROC_Meridian_HD621HDMI</Identifier>
-<FilePathName>_rPROC_Meridian_HD621HDMI.axi</FilePathName>
-<Comments></Comments>
-</File>
-<File CompileType="None" Type="Include"><Identifier>_rPROY_Faroudja</Identifier>
-<FilePathName>_rPROY_Faroudja.axi</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="None" Type="Include"><Identifier>_rPROY_JVC_Dila</Identifier>
@@ -194,38 +179,10 @@
 <FilePathName>_TP_MVP5200.axi</FilePathName>
 <Comments></Comments>
 </File>
-<File CompileType="None" Type="IR"><Identifier>BLURAY_PioneerBDP-LX70</Identifier>
-<FilePathName>ir\BLURAY_PioneerBDP-LX70.irl</FilePathName>
-<Comments></Comments>
-<DeviceMap DevAddr="dvBluRay"><DevName>dvBluRay</DevName>
-</DeviceMap>
-</File>
-<File CompileType="None" Type="IR"><Identifier>iPlus</Identifier>
-<FilePathName>ir\iPlus.irl</FilePathName>
-<Comments></Comments>
-<DeviceMap DevAddr="dvPlus"><DevName>dvPlus</DevName>
-</DeviceMap>
-</File>
-<File CompileType="None" Type="IR"><Identifier>SAT_LyngBox</Identifier>
-<FilePathName>ir\SAT_LyngBox.irl</FilePathName>
-<Comments></Comments>
-<DeviceMap DevAddr="dvSat"><DevName>dvSat</DevName>
-</DeviceMap>
-</File>
-<File CompileType="None" Type="IR"><Identifier>SUBWOOFER_Velodyne.irl</Identifier>
-<FilePathName>ir\SUBWOOFER_Velodyne.irl.irl</FilePathName>
-<Comments></Comments>
-</File>
 <File CompileType="None" Type="IR"><Identifier>TV_Sony_KV-32FS60E</Identifier>
 <FilePathName>ir\TV_Sony_KV-32FS60E.irl</FilePathName>
 <Comments></Comments>
 <DeviceMap DevAddr="dvTV"><DevName>dvTV</DevName>
-</DeviceMap>
-</File>
-<File CompileType="None" Type="IR"><Identifier>Video_Sony_RMT-V168</Identifier>
-<FilePathName>ir\Video_Sony_RMT-V168.irl</FilePathName>
-<Comments></Comments>
-<DeviceMap DevAddr="dvVideo"><DevName>dvVideo</DevName>
 </DeviceMap>
 </File>
 <File CompileType="Netlinx" Type="MasterSrc"><Identifier>Main, Rev01</Identifier>
