@@ -100,6 +100,13 @@ DEV_MOVISTAR 				= 5
 DEV_DVD_A 					= 6
 DEV_NINGUNO					= 6 
 
+BTN_EXT_UP					= 31 
+BTN_EXT_DOWN				= 32 
+BTN_EXT_LEFT				= 33 
+BTN_EXT_RIGHT				= 34 
+BTN_EXT_SELECT				= 35 
+BTN_EXT_RUEDA_UP			= 36
+BTN_EXT_RUEDA_DOWN			= 37
 
 BTN_LUZ_UP					= 850
 BTN_LUZ_DOWN				= 851
@@ -263,6 +270,16 @@ include '_TP_MVP5200.axi'
 
  
 DEFINE_VARIABLE //hay que ponerlo porque '_rPROC_Lexicon_MC8.axi' acaba con la sección DEFINE_EVENT
+
+
+integer aBtnExternalButtons[]  = 		
+{
+	 BTN_EXT_UP,
+	 BTN_EXT_DOWN,
+	 BTN_EXT_LEFT,
+	 BTN_EXT_RIGHT,
+	 BTN_EXT_SELECT
+}
 
 
 //Para bajar y subir las luces en sesión de cine
@@ -885,7 +902,7 @@ define_function arrancaPlus()
 					 wait TIEMPO_PLUS 'tiempo_plus'
 					 {
 						  setEstadoPlus( MOVISTAR_ENCENDIDO )
-						  ppush( cPlus, IR_IPLUS_1, 30 )  //encendido				
+						  ppush( cPlus, IR_IPLUS_POWER, 30 )  //encendido				
 							//WAIT 30 setCanal(2,1,3)
 							
 						  send_string 0, "'iPlus encendido...'"
@@ -896,7 +913,7 @@ define_function arrancaPlus()
 				else
 				{
 					 setEstadoPlus( MOVISTAR_ENCENDIDO )
-					 ppush( cPlus, IR_IPLUS_1, 30 )  //encendido				
+					 ppush( cPlus, IR_IPLUS_POWER, 30 )  //encendido				
 					//WAIT 30 setCanal(2,1,3)
 
 					 
@@ -1263,8 +1280,7 @@ define_function resetPlus()
 		wait TIEMPO_PLUS 'tiempo_plus'
 		{
 			 setEstadoPlus( MOVISTAR_ENCENDIDO )
-			 ppush( cPlus, IR_IPLUS_1, 30 )  //encendido				
-			 ppush( cPlus, IR_IPLUS_1, 0 )	//canal 1				
+			 ppush( cPlus, IR_IPLUS_POWER, 30 )  //encendido				
 		}
 	
 	}
@@ -1649,6 +1665,69 @@ button_event[ dvTp, BTN_VOL_MUTE ]
 	 }
 }
 
+
+//-----------------------------------------------------------------------
+button_event[ dvTp, aBtnExternalButtons ]
+//-----------------------------------------------------------------------
+{
+	 push:
+	 {
+		  local_var index, btn
+		  index = get_last( aBtnExternalButtons ) //¿te da el orden, no el valor, verdad?
+		  btn = aBtnExternalButtons[ index ]
+		  
+		  send_string 0, "'aBtnExternalButtons[', itoa( btn ),']'"
+
+		switch( btn )
+		{
+			 case BTN_EXT_UP:
+			 {
+				  switch( getDevice() )
+				  {
+						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_UP ] }
+						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_UP ]  }
+						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_UP ]  }
+				  }
+			 }
+			 case BTN_EXT_DOWN:
+			 {
+				  switch( getDevice() )
+				  {
+						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_DOWN ] }
+						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_DOWN ] }
+						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_DOWN ]  }
+				  }
+			 }
+			 case BTN_EXT_LEFT:
+			 {
+				  switch( getDevice() )
+				  {
+						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_LEFT ] }
+						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_LEFT ] }
+						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_LEFT ]  }
+				  }
+			 }
+			 case BTN_EXT_RIGHT:
+			 {
+				  switch( getDevice() )
+				  {
+						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_RIGHT ] }
+						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_RIGHT ] }
+						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_RIGHT ]  }
+				  }
+			 }
+			 case BTN_EXT_SELECT:
+			 {
+				  switch( getDevice() )
+				  {
+						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_OK ] }
+						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_ENTER ] }
+						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_ENTER ]  }
+				  }
+			 }
+		}//switch
+	 }//push
+}//button_event
 
 
 
