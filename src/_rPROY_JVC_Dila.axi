@@ -2,8 +2,13 @@ PROGRAM_NAME='_rPROY_JVC_Dila'
 
 DEFINE_CONSTANT
 
+
 //BTN_PROY_MENU				= 351
 //BTN_PROY_SALIR				= 352
+
+ BTN_PROY_ON	= 353
+ BTN_PROY_OFF	= 354
+
 
 CMD_PROY_ON					= 1
 CMD_PROY_OFF				= 2
@@ -20,6 +25,19 @@ TIEMPO_RESPONSE			= 50
 
 
 DEFINE_VARIABLE
+
+integer aBtnProy[] =
+{
+	 BTN_PROY_ON,
+	 BTN_PROY_OFF
+}
+
+integer aCmdProy[] =
+{
+	CMD_PROY_ON,
+	CMD_PROY_OFF
+}
+
 
 char sCmdProy[ 50 ][ 10 ]
 
@@ -125,6 +143,17 @@ clearCola( cProy, 'Proy' )
 DEFINE_FUNCTION doProyector(INTEGER iCmd)
 {
 	SEND_STRING dvProy,sCmdProy[iCmd]
+}
+
+
+DEFINE_EVENT
+
+button_event[ dvTp, aBtnProy ]
+{ 
+	 push:
+	 { 
+		  send_string dvProy, sCmdProy[ aCmdProy[ Get_Last( aBtnProy ) ] ]
+	 } 
 }
 
 DEFINE_PROGRAM

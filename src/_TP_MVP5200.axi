@@ -51,7 +51,7 @@ data_event[ dvTp ]
 				setEscena( 					ESC_NINGUNA )	//esto toca el mando
 				setPeticionEscena( 		ESC_NINGUNA )
 				
-				setEstadoPlus( 	IPLUS_PARADO )
+				setEstadoPlus( 	MOVISTAR_PARADO )
 
 				//setDevice( 					DEV_NINGUNO )	//esto también toca el mando
 
@@ -67,7 +67,7 @@ data_event[ dvTp ]
 				setFormatoP( 	PROY_FORMAT_50 )
 				
 				//setPantallaTV( false ) //2013-06-09, a ver si así va mejor
-				setGrupoCanales( BTN_GRUPO_CANALES_HD )
+				//setGrupoCanales( BTN_GRUPO_CANALES_HD )
 
 				On[ dvIOs, IO_LUZ_GENERAL ]
 

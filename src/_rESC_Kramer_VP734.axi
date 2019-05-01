@@ -45,39 +45,39 @@ DEFINE_VARIABLE
 
 char sCmdKramer[ 50 ][ KRAMER_D_LEN_CMD ];
 
-tCola cKramer
+tCola cEsc
 ssCmdKramer[ 100 ][ 50 ]
 
 define_function MainLine_Kramer()
 {
    local_var tCmd cmd
 
-	 switch( cKramer.estado )
+	 switch( cEsc.estado )
 	 {
 		  //---------
 		  case FREE:
 		  //---------
 		  {
-				if( pop( cKramer, cmd ) )
+				if( pop( cEsc, cmd ) )
 				{
 					  send_string 0, "ssCmdKramer[ cmd.cmd ]"
 					  send_string dvKramer, sCmdKramer[ cmd.cmd ]
-					  cKramer.estado = WAITING_WAIT
+					  cEsc.estado = WAITING_WAIT
 				}
 		  }
 		  //---------
 		  case WAITING_WAIT:
 		  //---------
 		  {
-				if( cKramer.last.tExe )
+				if( cEsc.last.tExe )
 				{
-					  cKramer.estado = WAITING_EXECUTION
-					  wait cKramer.last.tExe
-						  cKramer.estado = FREE
+					  cEsc.estado = WAITING_EXECUTION
+					  wait cEsc.last.tExe
+						  cEsc.estado = FREE
 				}
 				else
 				{ 
-					cKramer.estado = FREE 
+					cEsc.estado = FREE 
 				}
 		  }
 	 }
@@ -86,42 +86,42 @@ define_function MainLine_Kramer()
 
 DEFINE_START
 
-	sCmdKramer[ CMD_KRAMER_POWER_ON ]	= "'Y 0 10 1 ',$0d"	// Implemented
+	sCmdKramer[ CMD_KRAMER_POWER_ON ]	= "'Y 0 10 1',$0d"	// Implemented
 
-	sCmdKramer[ CMD_KRAMER_FREEZE ] 	= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_BLANK ] 		= "'Y 0 10 ',$0d"
+	sCmdKramer[ CMD_KRAMER_FREEZE ] 	= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_BLANK ] 		= "'Y 0 10',$0d"
 
-	sCmdKramer[ CMD_KRAMER_AUTOIMAGE ] 	= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_SAVE ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_RECALL ] 	= "'Y 0 10 ',$0d"
+	sCmdKramer[ CMD_KRAMER_AUTOIMAGE ] 	= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_SAVE ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_RECALL ] 	= "'Y 0 10',$0d"
 
-	sCmdKramer[ CMD_KRAMER_UNIV1 ] 		= "'Y 0 30 0 ',$0d"	//
+	sCmdKramer[ CMD_KRAMER_UNIV1 ] 		= "'Y 0 30 0',$0d"	// Cassette
 	//sCmdKramer[ CMD_KRAMER_UNIV1 ] 		= "'Y',$20,'0',$20,$1e,$20,'0',$20,$0d"	// Try this way using hexa instead of ASCII
 
-	sCmdKramer[ CMD_KRAMER_UNIV2 ] 		= "'Y 0 30 1 ',$0d"	//
+	sCmdKramer[ CMD_KRAMER_UNIV2 ] 		= "'Y 0 30 1',$0d"	// Nada conectado
 
-	sCmdKramer[ CMD_KRAMER_HDMI1 ] 		= "'Y 0 30 2 ',$0d"	// Blu-ray
-	sCmdKramer[ CMD_KRAMER_HDMI2 ] 		= "'Y 0 30 3 ',$0d"	// AppleTV
-	sCmdKramer[ CMD_KRAMER_HDMI3 ] 		= "'Y 0 30 4 ',$0d"	// Chomecast
-	sCmdKramer[ CMD_KRAMER_HDMI4 ] 		= "'Y 0 30 5 ',$0d"	// iPlus
+	sCmdKramer[ CMD_KRAMER_HDMI1 ] 		= "'Y 0 30 2',$0d"	// Blu-ray
+	sCmdKramer[ CMD_KRAMER_HDMI2 ] 		= "'Y 0 30 3',$0d"	// AppleTV
+	sCmdKramer[ CMD_KRAMER_HDMI3 ] 		= "'Y 0 30 4',$0d"	// Chomecast
+	sCmdKramer[ CMD_KRAMER_HDMI4 ] 		= "'Y 0 30 5',$0d"	// iPlus
 
-	sCmdKramer[ CMD_KRAMER_RESET ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_DP ] 		= "'Y 0 30 6 ',$0d"	//
-	sCmdKramer[ CMD_KRAMER_INFO ] 		= "'Y 0 10 ',$0d"
+	sCmdKramer[ CMD_KRAMER_RESET ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_DP ] 		= "'Y 0 30 6',$0d"	//
+	sCmdKramer[ CMD_KRAMER_INFO ] 		= "'Y 0 10',$0d"
 
-	sCmdKramer[ CMD_KRAMER_VOLUP ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_VODOWN ] 	= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_MUTE_ON ] 		= "'Y 0 11 1 ',$0d" //
+	sCmdKramer[ CMD_KRAMER_VOLUP ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_VODOWN ] 	= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_MUTE_ON ] 		= "'Y 0 11 1',$0d" //
 
-	sCmdKramer[ CMD_KRAMER_MENU ] 		= "'Y 0 0 ',$0d" //
+	sCmdKramer[ CMD_KRAMER_MENU ] 		= "'Y 0 0',$0d" //
 
-	sCmdKramer[ CMD_KRAMER_LEFT ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_RIGHT ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_UP ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_DOWN ] 		= "'Y 0 10 ',$0d"
-	sCmdKramer[ CMD_KRAMER_ENTER ] 		= "'Y 0 10 ',$0d"
+	sCmdKramer[ CMD_KRAMER_LEFT ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_RIGHT ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_UP ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_DOWN ] 		= "'Y 0 10',$0d"
+	sCmdKramer[ CMD_KRAMER_ENTER ] 		= "'Y 0 10',$0d"
 
-	sCmdKramer[ CMD_KRAMER_POWER_OFF ]	= "'Y 0 10 0 ',$0d" //
+	sCmdKramer[ CMD_KRAMER_POWER_OFF ]	= "'Y 0 10 0',$0d" //
 
 	 //---------
 
@@ -159,7 +159,7 @@ DEFINE_START
 
 	ssCmdKramer[ CMD_KRAMER_POWER_OFF ] 	= "'CMD_KRAMER_POWER_OFF'"
 
-	 clearCola( cKramer, 'Kramer' )
+	 clearCola( cEsc, 'Kramer' )
 
 	define_function kramer(integer iCmd)
 	{
