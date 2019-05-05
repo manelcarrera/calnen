@@ -119,7 +119,7 @@ PROY_DISPONIBLE				= 3
 
 //Tiempos
 
-TIEMPO_ESPERA_PROYECTOR		= 900 //2min. (1)proteccion de la bombeta, (2) apagada de llums
+TIEMPO_ESPERA_PROYECTOR		= 600 // 2019-05-05: Peticion explicita de Lluis ... antes: //2min. (1)proteccion de la bombeta, (2) apagada de llums
 TIEMPO_PANTALLA_UP_DOWN		= 450
 TIEMPO_ESPERA_LUCES_CINE 	= 100
 //TIEMPO_ARRANQUE_TV 			= 150 //a partir de aqui enviamos código para eliminar el OSD
@@ -130,7 +130,7 @@ TIEMPO_RAMPA_LUCES			= 60
 TIEMPO_PLUS					= 400 // 715: 1m15s. -> lo paso a 40s., le quito 35s, como dijo Alberto (2019-05-01)
 
 TIEMPO_RETARDO_TV_OFF		= 250 //25s
-TIEMPO_RETARDO_PROY_OFF		= 1200 //22s, de 15s a 22s
+TIEMPO_RETARDO_PROY_OFF		= 800 // 2019-05-05: de 2 min a 1 min por peticion de Lluis
 
 //IU
 
@@ -174,6 +174,7 @@ structure tEstado
 	 integer 	estadoLyngBox
 	 integer 	estadoPlus
 	 integer 	pantallaTV
+	 integer 	pantallaProy
 	 integer 	grupoCanales
 }
 
@@ -423,6 +424,9 @@ define_function integer isFormatoP( integer val ){ if( m_estado.formatoP == val 
 define_function setPantallaTV( integer val ){ m_estado.pantallaTV = val }
 define_function integer isPantallaTV(){ return m_estado.pantallaTV }
 //------------------------------------------------------------------------------------------
+define_function setPantallaProy( integer val ){ m_estado.pantallaProy = val }
+define_function integer isPantallaProy(){ return m_estado.pantallaProy }
+//------------------------------------------------------------------------------------------
 define_function setGrupoCanales( integer val ){ m_estado.grupoCanales = val }
 define_function integer getGrupoCanales(){ return m_estado.grupoCanales }
 //------------------------------------------------------------------------------------------
@@ -454,6 +458,10 @@ define_function showPopupDevice( integer val )
 		  case DEV_MOVISTAR:	{ showPopup( '03-iPlus' ) }
 		  case DEV_DVD_A:		{ showPopup( '05-DVD' ) }
 		  case DEV_BLURAY:		{ showPopup( '06-BluRay' ) }
+
+		  case DEV_APPLE:		
+		  case DEV_CHROMECAST:	
+		  case DEV_CASSETTE:	{ showPopup( '12-Common' ) }
 	 }
 }
 
@@ -1306,6 +1314,58 @@ define_function lucesOff()
 		  Off[ dvIOs, IO_LUZ_DOWN ]
 }
 
+define_function handle_common_btn_device( integer btn )
+{
+	switch( btn )
+	{
+		 case BTN_EXT_UP:
+		 {
+			  switch( getDevice() )
+			  {
+					case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_UP ] }
+					case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_UP ]  }
+					case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_UP ]  }
+			  }
+		 }
+		 case BTN_EXT_DOWN:
+		 {
+			  switch( getDevice() )
+			  {
+					case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_DOWN ] }
+					case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_DOWN ] }
+					case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_DOWN ]  }
+			  }
+		 }
+		 case BTN_EXT_LEFT:
+		 {
+			  switch( getDevice() )
+			  {
+					case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_LEFT ] }
+					case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_LEFT ] }
+					case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_LEFT ]  }
+			  }
+		 }
+		 case BTN_EXT_RIGHT:
+		 {
+			  switch( getDevice() )
+			  {
+					case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_RIGHT ] }
+					case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_RIGHT ] }
+					case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_RIGHT ]  }
+			  }
+		 }
+		 case BTN_EXT_SELECT:
+		 {
+			  switch( getDevice() )
+			  {
+					case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_OK ] }
+					case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_ENTER ] }
+					case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_ENTER ]  }
+			  }
+		 }
+	}//switch
+}
+
 
 define_function MainLineRelays()
 {
@@ -1678,58 +1738,38 @@ button_event[ dvTp, aBtnExternalButtons ]
 		  
 		  send_string 0, "'aBtnExternalButtons[', itoa( btn ),']'"
 
-		switch( btn )
-		{
-			 case BTN_EXT_UP:
-			 {
-				  switch( getDevice() )
-				  {
-						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_UP ] }
-						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_UP ]  }
-						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_UP ]  }
-				  }
-			 }
-			 case BTN_EXT_DOWN:
-			 {
-				  switch( getDevice() )
-				  {
-						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_DOWN ] }
-						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_DOWN ] }
-						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_DOWN ]  }
-				  }
-			 }
-			 case BTN_EXT_LEFT:
-			 {
-				  switch( getDevice() )
-				  {
-						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_LEFT ] }
-						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_LEFT ] }
-						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_LEFT ]  }
-				  }
-			 }
-			 case BTN_EXT_RIGHT:
-			 {
-				  switch( getDevice() )
-				  {
-						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_RIGHT ] }
-						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_RIGHT ] }
-						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_RIGHT ]  }
-				  }
-			 }
-			 case BTN_EXT_SELECT:
-			 {
-				  switch( getDevice() )
-				  {
-						case DEV_MOVISTAR:	{ Pulse[ 		dvPlus, 			IR_IPLUS_OK ] }
-						case DEV_DVD_A:		{ send_string 	dvDvd, sCmdDVD[ 	CMD_DVD_ENTER ] }
-						case DEV_BLURAY:	{ send_string 	dvBluRay, sCmdBR[ 	CMD_BR_ENTER ]  }
-				  }
-			 }
-		}//switch
+		  if( isPantallaTV() )
+		  {
+				switch( btn )
+				{
+					 case BTN_EXT_UP:		{ ppush( cTV, IR_TV_UP, 0 ) }
+					 case BTN_EXT_DOWN:		{ ppush( cTV, IR_TV_DOWN, 0 ) }
+					 case BTN_EXT_LEFT:		{ ppush( cTV, IR_TV_LEFT, 0 ) }
+					 case BTN_EXT_RIGHT:	{ ppush( cTV, IR_TV_RIGHT, 0 ) }
+					 case BTN_EXT_SELECT:	{ ppush( cTV, IR_TV_OK, 0 ) }
+				}
+		  }
+		  else if( isPantallaProy() )
+		  {
+				switch( btn )
+				{
+					 case BTN_EXT_UP:		{ doProyector( CMD_PROY_UP ) }
+					 case BTN_EXT_DOWN:		{ doProyector( CMD_PROY_DOWN ) }
+					 case BTN_EXT_LEFT:		{ doProyector( CMD_PROY_LEFT ) }
+					 case BTN_EXT_RIGHT:	{ doProyector( CMD_PROY_RIGHT ) }
+					 case BTN_EXT_SELECT:	{ doProyector( CMD_PROY_OK ) }
+				}
+		  }
+		  else
+		  {
+		  	handle_common_btn_device( btn )
+		  }
+
 	 }//push
 }//button_event
 
 
+////////////////////////////// Pantalla para controlar la TV
 
 button_event[ dvTp, BTN_GEN_TV_ABRIR ]
 { 
@@ -1748,8 +1788,24 @@ button_event[ dvTp, BTN_GEN_TV_SALIR ]
 	 }
 }
 
-button_event[ dvTp, BTN_GEN_PROY_ABRIR ]{ push: { showPopup('15-BotonesProyector') } }
-button_event[ dvTp, BTN_GEN_PROY_SALIR ]{ push: { hidePopup('15-BotonesProyector') } }
+////////////////////////////// Pantalla para controlar proyector
+
+button_event[ dvTp, BTN_GEN_PROY_ABRIR ]
+{ 
+	push: 
+	{ 
+		setPantallaProy( true )
+		showPopup('15-BotonesProyector') 
+	} 
+}
+button_event[ dvTp, BTN_GEN_PROY_SALIR ]
+{ 
+	push: 
+	{ 
+		setPantallaProy( false )
+		hidePopup('15-BotonesProyector') 
+	} 
+}
 
 button_event[ dvTp, BTN_GEN_DSP_SALIR ]{ push: { hidePopup('12-DSP') } }
 
