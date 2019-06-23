@@ -469,10 +469,12 @@ define_function set_audio( integer device )
 {
 	if( getEscena() != ESC_TV ) // si no lo arranca
 	{
-		if( getDevice() == DEV_DVD_A)
-			ppush( cProc, CMD_PROC_SRC_DVD, 10 ) /// TODO: 2019-05-01 - COnfirmar con Alberto
+		if( getDevice() == DEV_DVD_A )
+			ppush( cProc, CMD_PROC_SRC_LP, 10 )
+		else if( getDevice() == DEV_CASSETTE )
+			ppush( cProc, CMD_PROC_SRC_VCR2, 10 )
 		else
-			ppush( cProc, CMD_PROC_SRC_TAPE1, 10 )
+			ppush( cProc, CMD_PROC_SRC_TAPE1, 10 ) //Krammer
 	}
 }
 
@@ -1671,9 +1673,9 @@ button_event[ dvTp, BTN_VOL_UP ]
 	 {
 		  switch( getEscena() )
 		  {
-				case ESC_CINE:				
-				case ESC_MUSICA:			
-				case ESC_TV_CON_EQUIPOS:	{ send_string dvProc, sCmdProc[ 	CMD_PROC_VOL_UP ] }
+				//case ESC_CINE:				
+				//case ESC_MUSICA:			
+				//case ESC_TV_CON_EQUIPOS:	{ send_string dvProc, sCmdProc[ 	CMD_PROC_VOL_UP ] }
 				
 				case ESC_TV:				{ Pulse[ dvTv, 						IR_TV_VOL_UP ] }
 		  }
