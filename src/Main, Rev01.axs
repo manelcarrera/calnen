@@ -441,7 +441,7 @@ define_function marcaDevice( integer val )
 
 	 send_string 0,  "'marcaDevice(', sDevices[ val ],') btn[', itoa( btn ) ,']'"
 
-	 for( i = 11; i <= 16; i++ )
+	 for( i = 11; i < 17; i++ )
 	 {
 
 		  if( i == btn )
@@ -473,6 +473,10 @@ define_function set_audio( integer device )
 			ppush( cProc, CMD_PROC_SRC_LP, 10 )
 		else if( getDevice() == DEV_CASSETTE )
 			ppush( cProc, CMD_PROC_SRC_VCR2, 10 )
+		else if( getDevice() == DEV_BLURAY )
+			ppush( cProc, CMD_PROC_SRC_TAPE2, 10 )
+		else if( getDevice() == DEV_APPLE )
+			ppush( cProc, CMD_PROC_SRC_LASER_DISC, 10 )
 		else
 			ppush( cProc, CMD_PROC_SRC_TAPE1, 10 ) //Krammer
 	}
@@ -528,7 +532,7 @@ define_function marcaEscena( integer val )
 
 	 send_string 0, "'marcaEscena(', sEscenas[ val ],') btn(', itoa( btn ),')'"
 	 
-	 for( i = 1; i <= 4; i++ )
+	 for( i = 1; i < 5; i++ )
 	 {
 		  if( i == btn )
 				On[ dvTp, i ]
@@ -1677,7 +1681,8 @@ button_event[ dvTp, BTN_VOL_UP ]
 				//case ESC_MUSICA:			
 				//case ESC_TV_CON_EQUIPOS:	{ send_string dvProc, sCmdProc[ 	CMD_PROC_VOL_UP ] }
 				
-				case ESC_TV:				{ Pulse[ dvTv, 						IR_TV_VOL_UP ] }
+				//case ESC_TV:				{ Pulse[ dvTv, 						IR_TV_VOL_UP ] }
+				default: {}
 		  }
 	 }
 }
