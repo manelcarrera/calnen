@@ -467,23 +467,28 @@ define_function showPopupDevice( integer val )
 
 define_function set_audio( integer device )
 {
+	local_var src
+
 	if( getEscena() != ESC_TV ) // si no lo arranca
 	{
-		if( getDevice() == DEV_DVD_A )
-			ppush( cProc, CMD_PROC_SRC_LP, 10 )
-		else if( getDevice() == DEV_CASSETTE )
-			ppush( cProc, CMD_PROC_SRC_VCR2, 10 )
-		else if( getDevice() == DEV_BLURAY )
-			ppush( cProc, CMD_PROC_SRC_TAPE2, 10 )
-		else if( getDevice() == DEV_APPLE )
-			ppush( cProc, CMD_PROC_SRC_LASER_DISC, 10 )
-		else
-			ppush( cProc, CMD_PROC_SRC_TAPE1, 10 ) //Krammer
+		switch( device )  // Error I don't understand as in next function (set_video) is done
+		{
+			 case DEV_CASSETTE:		{ src = CMD_PROC_SRC_VCR2; }
+			 case DEV_DVD_A:		{ src = CMD_PROC_SRC_LP; }
+
+			 case DEV_BLURAY:		{ src = CMD_PROC_SRC_TAPE2; }
+			 case DEV_APPLE:		{ src = CMD_PROC_SRC_LASER_DISC; }
+			 case DEV_CHROMECAST:	{ src = CMD_PROC_SRC_TAPE1; }
+			 case DEV_MOVISTAR:		{ src = CMD_PROC_SRC_VCR1; }
+		}
+		ppush( cProc, src, 10 )
 	}
 }
 
 define_function set_video( integer device )
 {
+	local_var src
+
 	// needed?
 	if( getEscena() == ESC_CINE )
 		doProyector(CMD_PROY_HDMI1) 
@@ -494,14 +499,15 @@ define_function set_video( integer device )
 
 	switch( device ) 
 	{
-		 case DEV_CASSETTE:		{ ppush( cEsc, CMD_KRAMER_UNIV1, 10 ) }
-		 case DEV_DVD_A:		{ ppush( cEsc, CMD_KRAMER_UNIV2, 10 ) }
+		case DEV_CASSETTE:	{ src = CMD_KRAMER_UNIV1; }
+		case DEV_DVD_A:		{ src = CMD_KRAMER_UNIV2; }
 
-		 case DEV_BLURAY:		{ ppush( cEsc, CMD_KRAMER_HDMI1, 10 ) }
-		 case DEV_APPLE:		{ ppush( cEsc, CMD_KRAMER_HDMI2, 10 ) }
-		 case DEV_CHROMECAST:	{ ppush( cEsc, CMD_KRAMER_HDMI3, 10 ) }
-		 case DEV_MOVISTAR:		{ ppush( cEsc, CMD_KRAMER_HDMI4, 10 ) }
+		case DEV_BLURAY:	{ src = CMD_KRAMER_HDMI1; }
+		case DEV_APPLE:		{ src = CMD_KRAMER_HDMI2; }
+		case DEV_CHROMECAST:{ src = CMD_KRAMER_HDMI3; }
+		case DEV_MOVISTAR:	{ src = CMD_KRAMER_HDMI4; }
 	}
+	ppush( cEsc, src, 10 )
 }
 
 define_function setDevice( integer val )
